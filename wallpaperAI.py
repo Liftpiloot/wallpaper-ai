@@ -7,6 +7,8 @@ import geocoder
 from openai import OpenAI
 import requests
 import ctypes
+import urllib.request
+import time
 
 
 def get_weather(lon, lat, openweather_api_key):
@@ -57,6 +59,7 @@ def set_wallpaper(filename):
 
 
 def run_program():
+
     # Load .env file
     path = pathlib.Path(__file__).parent / 'api_key.env'
     # Set openAI api key from .env file
@@ -87,3 +90,17 @@ def run_program():
 
     # Set image as wallpaper
     set_wallpaper(filename)
+
+
+def wait_for_internet_connection():
+    while True:
+        try:
+            response = urllib.request.urlopen('https://www.google.com', timeout=1)
+            return
+        except urllib.request.URLError:
+            pass
+        time.sleep(1)
+
+
+wait_for_internet_connection()
+run_program()
